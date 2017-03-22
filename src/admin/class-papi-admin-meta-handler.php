@@ -12,7 +12,7 @@ final class Papi_Admin_Meta_Handler extends Papi_Core_Data_Handler {
 	 */
 	protected function get_meta_type() {
 		if ( $current_filter = current_filter() ) {
-			return papi_get_meta_type( explode( '_', $current_filter )[1] );
+			// return papi_get_meta_type( explode( '_', $current_filter )[1] );
 		}
 
 		return papi_get_meta_type();
@@ -192,9 +192,15 @@ final class Papi_Admin_Meta_Handler extends Papi_Core_Data_Handler {
 	 * Setup actions.
 	 */
 	protected function setup_actions() {
-		add_action( 'save_post', [$this, 'save_meta_boxes'], 1, 2 );
-		add_action( 'created_term', [$this, 'save_meta_boxes'], 1 );
-		add_action( 'edit_term', [$this, 'save_meta_boxes'], 1 );
+		add_action('admin_init', function() {
+			$meta_type = $this->get_meta_type();
+			if( 'post' === $meta_type ) {
+				add_action( 'save_post', [$this, 'save_meta_boxes'], 1, 2 );
+			} elseif( 'term' ===  $meta_type ) {
+				add_action( 'edit_term', [$this, 'save_meta_boxes'], 1 );
+				add_action( 'created_term', [$this, 'save_meta_boxes'], 1 );
+			}
+		});
 		add_action( 'wp_restore_post_revision', [$this, 'restore_post_revision'], 10, 2 );
 	}
 
