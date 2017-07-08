@@ -94,8 +94,8 @@ function papi_get_page( $id = 0, $type = 'post' ) {
  *
  * @return string
  */
-function papi_get_page_type_id( $post_id = 0 ) {
-	return papi_get_entry_type_id( $post_id );
+function papi_get_page_type_id( $post_id = 0, $type = 'post' ) {
+	return papi_get_entry_type_id( $post_id, $type );
 }
 
 /**
